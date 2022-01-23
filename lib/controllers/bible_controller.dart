@@ -11,7 +11,7 @@ class BibleController extends GetxController {
   //▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼//
   //▼▼▼▼ "SharedPrefs" 정리 ▼▼▼▼//
   //▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼//
-  var Prefs_isLoading = true.obs; // 성경리스트 불러왔는지 확인
+  var Prefs_isLoading = true; // 성경리스트 불러왔는지 확인
 
   Future<void> SavePrefsData() async {
     //1. 객체 불러오기
@@ -51,10 +51,11 @@ class BibleController extends GetxController {
     SelectedStyle   = prefs.getString('SelectedStyle') == null ? SelectedStyle : prefs.getString('SelectedStyle')!;
     SelectedBibleViewNumber = prefs.getString('SelectedBibleViewNumber')  == null ? SelectedBibleViewNumber : prefs.getString('SelectedBibleViewNumber')!;
     //3. 로딩상태 업데이트
-    Prefs_isLoading.value = false;
+    Prefs_isLoading = false;
+
+    print("로딩완료!!!${Prefs_isLoading}");
     update(); // 상태업데이트 내용이 반영되어 로딩이 끝났음을 알려줘야함 ㄱㄱ
 
-    print("불러오기 완료");
   }
 
   //▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼//

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.echo">
+    package="hicor.bible.echo">
    <application
-        android:label="echo"
+        android:label="매일성경"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

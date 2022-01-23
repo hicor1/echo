@@ -68,6 +68,9 @@ class _BibleFreeSearchScreenState extends State<BibleFreeSearchScreen> {
                           // 최소 검색글자수 ( 2글자 ) 만족하는지 체크
                           if(textController.text.length>=2){
                             BibleCtr.GetFreeSearchList(textController.text);
+                            // 키패드 감추기
+                            FocusScopeNode currentFocus = FocusScope.of(context);
+                            currentFocus.unfocus();
                           }else{
                             FlutterDialog(context);
                           }
@@ -97,6 +100,9 @@ class _BibleFreeSearchScreenState extends State<BibleFreeSearchScreen> {
                             // 최소 검색글자수 ( 2글자 ) 만족하는지 체크
                             if(textController.text.length>=2){
                               BibleCtr.GetFreeSearchList(textController.text);
+                              // 키패드 감추기
+                              FocusScopeNode currentFocus = FocusScope.of(context);
+                              currentFocus.unfocus();
                             }else{
                               FlutterDialog(context);
                             }

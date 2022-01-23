@@ -196,7 +196,7 @@ class _FavoriteResultState extends State<FavoriteResult> {
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text("${result[index]["국문"]}(${result[index]["영문"]}) ${result[index]["cnum"]}장 ${result[index]["vnum"]}절", style: TextStyle(fontSize: BibleCtr.Textsize*0.2+10,color: Colors.grey.withOpacity(1.0))),
+                                              Text("${result[index]["bcode"]}.${result[index]["국문"]}(${result[index]["영문"]}) ${result[index]["cnum"]}장 ${result[index]["vnum"]}절", style: TextStyle(fontSize: BibleCtr.Textsize*0.2+10,color: Colors.grey.withOpacity(1.0))),
                                               // 즐겨찾기 버튼 추가
                                               IconButton(
                                                   iconSize: 25,

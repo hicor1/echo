@@ -1,4 +1,4 @@
-package com.example.echo
+package hicor.bible.echo
 
 import io.flutter.embedding.android.FlutterActivity
 

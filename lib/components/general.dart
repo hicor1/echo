@@ -56,7 +56,7 @@ void FlutterDialog(context) {
 
 // 다음페이지 넘어갈지 묻는 경고창
 Future<void> IsMoveDialog(context, retult, index, IsFavoritePage) async {
-  var verses_info = "${retult[index]['bcode']}. ${retult[index]['국문']}(  ${retult[index]['영문']}) :  ${retult[index]['cnum']}장  ${retult[index]['vnum']}절";
+  var verses_info = "${retult[index]['bcode']}. ${retult[index]['국문']}(${retult[index]['영문']}) :  ${retult[index]['cnum']}장  ${retult[index]['vnum']}절";
   await showDialog(
       context: context,
       //barrierDismissible - Dialog를 제외한 다른 화면 터치 x

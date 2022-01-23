@@ -34,7 +34,7 @@ class _BiblePartListPageState extends State<BibleVerseListPage> {
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: Colors.transparent,
-          title: Text(BibleCtr.BookName.value, style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold)),
+          title: Text("${BibleCtr.BookName.value}", style: TextStyle(fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold)),
           bottom: TabBar(
             onTap: BibleCtr.VerseListChangeTabIndex,
             indicatorColor: Colors.white,
@@ -114,13 +114,26 @@ class _BiblePartListPageState extends State<BibleVerseListPage> {
                   // 선택된 항목에 대한 색변경 이벤트
                   backgroundColor: index+1 == _selectedvalue ? Colors.blueAccent : Colors.transparent,
                   child: TextButton(
-                      child: Text(
-                        "${Newlist[index][TargetColumn]} $endword",
-                        style: TextStyle(
-                            fontSize: 20,
-                            // 선택한 항목에 대한 색변경 이벤트
-                            color: index+1 == _selectedvalue ? Colors.white : Colors.white,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${Newlist[index][TargetColumn]}",
+                            style: TextStyle(
+                                fontSize: 20,
+                                // 선택한 항목에 대한 색변경 이벤트
+                                color: index+1 == _selectedvalue ? Colors.white : Colors.white,
+                            ),
+                          ),
+                          Text(
+                            "$endword",
+                            style: TextStyle(
+                              fontSize: 20,
+                              // 선택한 항목에 대한 색변경 이벤트
+                              color: index+1 == _selectedvalue ? Colors.white.withOpacity(0.8) : Colors.white.withOpacity(0.4),
+                            ),
+                          ),
+                        ],
                       ),
                       onPressed: () {
                         //1. 장(chapter)페이지 인 경우,

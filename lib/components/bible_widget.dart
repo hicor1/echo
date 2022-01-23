@@ -156,7 +156,7 @@ class _MainBibleSearchResultState extends State<MainBibleSearchResult> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text("${BibleCtr.BibleSearchResult[index]['bcode']}."
-                                  "${BibleCtr.BibleSearchResult[index]['국문']}( "
+                                  "${BibleCtr.BibleSearchResult[index]['국문']}("
                                   "${BibleCtr.BibleSearchResult[index]['영문']}) : "
                                   "${BibleCtr.BibleSearchResult[index]['cnum']}장 "
                                 "${BibleCtr.BibleSearchResult[index]['vnum']}절 ",
@@ -179,7 +179,7 @@ class _MainBibleSearchResultState extends State<MainBibleSearchResult> {
                                     // 즐겨찾기 등록 안내메세지 토스트(Toast)
                                     PopToast(
                                         "${BibleCtr.BibleSearchResult[index]['bcode']}."
-                                            "${BibleCtr.BibleSearchResult[index]['국문']}( "
+                                            "${BibleCtr.BibleSearchResult[index]['국문']}("
                                             "${BibleCtr.BibleSearchResult[index]['영문']}) : "
                                             "${BibleCtr.BibleSearchResult[index]['cnum']}장 "
                                             "${BibleCtr.BibleSearchResult[index]['vnum']}절"
@@ -403,7 +403,7 @@ class _FreeSearchResultState extends State<FreeSearchResult> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text("${result[index]['bcode']}."
-                              "${result[index]['국문']}( "
+                              "${result[index]['국문']}("
                               "${result[index]['영문']}) : "
                               "${result[index]['cnum']}장 "
                               "${result[index]['vnum']}절",
@@ -426,7 +426,7 @@ class _FreeSearchResultState extends State<FreeSearchResult> {
                                 // 즐겨찾기 등록 안내메세지 토스트(Toast)
                                 PopToast(
                                     "${BibleCtr.FressSearchList[index]['bcode']}."
-                                        "${BibleCtr.FressSearchList[index]['국문']}( "
+                                        "${BibleCtr.FressSearchList[index]['국문']}("
                                         "${BibleCtr.FressSearchList[index]['영문']}) : "
                                         "${BibleCtr.FressSearchList[index]['cnum']}장 "
                                         "${BibleCtr.FressSearchList[index]['vnum']}절"
@@ -587,7 +587,7 @@ class _FloatingButtonState extends State<FloatingButton> {
           left: 20,
           bottom: 0.0,
           child: Container(
-            width: 130,
+            width: 75,
             height: 55,
             child: FloatingActionButton(
               backgroundColor: Colors.transparent,
@@ -600,13 +600,13 @@ class _FloatingButtonState extends State<FloatingButton> {
                 if(StartId>=1){
                   BibleCtr.ClikFloatingButton(StartId);
                 }else{
-                  PopToast("처음페이지 입니다.");
+                  PopToast("첫페이지 입니다.");
                 }
               },
               child: Icon(Icons.keyboard_arrow_left, size: 55, color: Colors.white.withOpacity(0.5),),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(70),
-                side: BorderSide(color: Colors.grey.withOpacity(0.3), width: 3)
+                side: BorderSide(color: Colors.grey.withOpacity(0.3), width: 2)
               ),
             ),
           ),
@@ -615,7 +615,7 @@ class _FloatingButtonState extends State<FloatingButton> {
           right: 20,
           bottom: 0.0,
           child: Container(
-            width: 130,
+            width: 75,
             height: 55,
             child: FloatingActionButton(
               backgroundColor: Colors.transparent,
@@ -624,7 +624,7 @@ class _FloatingButtonState extends State<FloatingButton> {
               onPressed: () {
                 // 페이지 조회
                 var StartId = BibleCtr.id + int.parse(BibleCtr.SelectedBibleViewNumber);
-                if(StartId<=31102){
+                if(StartId<=31102){ // 총 31102개의 절로 이루어져있으므로,
                   BibleCtr.ClikFloatingButton(StartId);
                 }else{
                   PopToast("마지막페이지 입니다.");
@@ -633,7 +633,7 @@ class _FloatingButtonState extends State<FloatingButton> {
               child: Icon(Icons.keyboard_arrow_right, size: 55, color: Colors.white.withOpacity(0.5),),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(70),
-                side: BorderSide(color: Colors.grey.withOpacity(0.3), width: 3)
+                side: BorderSide(color: Colors.grey.withOpacity(0.3), width: 2)
               ),
             ),
           ),

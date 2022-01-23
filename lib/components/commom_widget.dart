@@ -40,6 +40,9 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 onEditingComplete: () {
                   if (textController.text.length >= 2) {
                     BibleCtr.GetFreeSearchList(textController.text);
+                    // 검색어 입력 완료 후 키패드 감추기
+                    FocusScopeNode currentFocus = FocusScope.of(context);
+                    currentFocus.unfocus();
                   } else {
                     FlutterDialog(context);
                   }

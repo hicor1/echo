@@ -5,8 +5,8 @@
 // https://ichi.pro/ko/flutter-google-logeu-in-guhyeon-124831274771693
 // https://kyungsnim.net/131
 
-import 'package:flutter/material.dart';
 import 'package:echo/pages/root_page.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'controllers/bible_controller.dart';
@@ -14,14 +14,12 @@ import 'controllers/favorite_controller.dart';
 
 // (앱 기동)
 void main() {
-
   runApp(MyApp());
 }
 
 // Gex컨트롤러 객체 초기화
 final BibleCtr = Get.put(BibleController());
 final FavoriteCtr = Get.put(FavoriteController());
-
 
 // (앱생성)
 class MyApp extends StatelessWidget {
@@ -39,16 +37,22 @@ class MyApp extends StatelessWidget {
     //     ? const Center(child: CircularProgressIndicator())
     //     :
 
-    return BibleCtr.Prefs_isLoading.value
-        ? const Center(child: CircularProgressIndicator()) :
-    GetMaterialApp(
-      // 디버그 모드 해제
-      debugShowCheckedModeBanner: false,
-      title: '언제나 성경',
-      theme: new ThemeData(
-          fontFamily: '', // 향후 폰트 적용해보도록ㄱㄱ
-          scaffoldBackgroundColor: const Color(0x000000FF),),
-      home: RootPage(),
-    );
+    return GetBuilder<BibleController>(
+        init: BibleController(),
+        builder: (_) {
+          //상태값 불러오기 로딩이 완료되었는지 확인한다.
+          return BibleCtr.Prefs_isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : GetMaterialApp(
+                  // 디버그 모드 해제
+                  debugShowCheckedModeBanner: false,
+                  title: '언제나 성경',
+                  theme: new ThemeData(
+                    fontFamily: '', // 향후 폰트 적용해보도록ㄱㄱ
+                    scaffoldBackgroundColor: const Color(0x000000FF),
+                  ),
+                  home: RootPage(),
+                );
+        });
   }
 }

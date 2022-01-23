@@ -27,7 +27,7 @@ class FavoriteController extends GetxController {
     //2. 불러올 상태값 목록 및 데이터 업데이트
     FavoriteBibleName     = prefs.getString('FavoriteBibleName') == null ? this.FavoriteBibleName : prefs.getString('FavoriteBibleName')!;
     DropdownFilterList    = prefs.getStringList('DropdownFilterList') == null ? this.DropdownFilterList : prefs.getStringList('DropdownFilterList')!;
-    print("불러오기 완료");
+    update(); // 상태업데이트 내용이 반영되어 로딩이 끝났음을 알려줘야함 ㄱㄱ
   }
 
   //▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼//
