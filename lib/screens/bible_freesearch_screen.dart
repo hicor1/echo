@@ -65,6 +65,7 @@ class _BibleFreeSearchScreenState extends State<BibleFreeSearchScreen> {
                       child: TextField(
                         // 키패드에서 "완료"버튼 누르면 이벤트 발동
                         onEditingComplete: (){
+                          // 최소 검색글자수 ( 2글자 ) 만족하는지 체크
                           if(textController.text.length>=2){
                             BibleCtr.GetFreeSearchList(textController.text);
                           }else{
@@ -93,6 +94,7 @@ class _BibleFreeSearchScreenState extends State<BibleFreeSearchScreen> {
                         child: IconButton(
                           // 돋보기 버튼 누르면 이벤트 발동
                           onPressed: (){
+                            // 최소 검색글자수 ( 2글자 ) 만족하는지 체크
                             if(textController.text.length>=2){
                               BibleCtr.GetFreeSearchList(textController.text);
                             }else{

@@ -160,109 +160,113 @@ class _FavoriteResultState extends State<FavoriteResult> {
                       }
                       // 여기부터 위젯 발사
                       return
-                        Column(
-
-                          children: [
-                            // 날짜가 같을때는 구분선을 짧게 그어준다
-                            Divider(
-                                color: Colors.white,
-                                thickness:GetForwardDate(index)==GetDate(index)? 0.5 : 1.0 ,
-                                indent: GetForwardDate(index)==GetDate(index)? 70 : 0),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // 날짜정보 뿌리기
-                                SizedBox(
-                                  width: 70,
-                                  child: Text(GetForwardDate(index)==GetDate(index)? "" : "${GetDate(index)}", textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: BibleCtr.Textsize, color: Colors.white)),
-                                ),
-                                // 즐겨찾기 버튼 + 성경구절 뿌리기
-                                Flexible(
-                                  child: Container(
-                                    padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("${result[index]["국문"]}(${result[index]["영문"]}) ${result[index]["cnum"]}장 ${result[index]["vnum"]}절", style: TextStyle(fontSize: BibleCtr.Textsize*0.2+10,color: Colors.grey.withOpacity(1.0))),
-                                            // 즐겨찾기 버튼 추가
-                                            IconButton(
-                                                iconSize: 25,
-                                                padding: EdgeInsets.zero, // 아이콘 패딩 없애기
-                                                constraints: BoxConstraints(), // 아이콘 패딩 없애기
-                                                icon : FavoriteCtr.TempMainBookmarkedList[index] == 1? Icon(Icons.favorite) : Icon(Icons.favorite_border),
-                                                color: FavoriteCtr.TempMainBookmarkedList[index]== 1? Colors.red : Colors.grey,
-                                                onPressed: () async {
-                                                  // 북마크 해제인경우 안내창 띄우기
-                                                  if (FavoriteCtr.TempMainBookmarkedList[index] == 1) {
-                                                    // 안내창 띄우기
-                                                    String Alert = await showDialog(
-                                                      context: context,
-                                                      barrierDismissible: false, // user must tap button!
-                                                      builder: (BuildContext context) {
-                                                        return AlertDialog(
-                                                          title: Text('즐겨찾기를 해제하시겠습니까?'),
-                                                          content: Text("즐겨찾기 해제를 원하실경우 '예' 버튼을 눌러주세요"),
-                                                          actions: <Widget>[
-                                                            OutlinedButton(
-                                                              child: Text('예'),
-                                                              onPressed: () {
-                                                                Navigator.pop(context, "예");
-                                                                // 즐겨찾기 해제동작 입력
-                                                                // 즐겨찾기 버튼 누르면, 즐겨찾기 DB  업뎃 ( 실제 DB에 기록하는 부분 )
-                                                                FavoriteCtr.UpdateBookmarked(
-                                                                    result[index]['_id'], // ID
-                                                                    FavoriteCtr.TempMainBookmarkedList[index] // 현재상태
-                                                                );
-                                                                // 즐겨찾기 임시보관리스트 업데이트 ( UI 반응형 업뎃을 위함 )
-                                                                FavoriteCtr.FrequentlyUpdateFavoriteBookmarkedList(index);
-                                                                // 즐겨찾기 해제 Alert
-                                                                showAlertDialog2(context);
-                                                                // 즐겨찾기 등록 안내메세지 토스트(Toast)
-                                                                PopToast("${result[index]['bcode']}.${result[index]['국문']}( ${result[index]['영문']}) : ${result[index]['cnum']}장 ${result[index]['vnum']}절${FavoriteCtr.TempMainBookmarkedList[index] == 1? " 즐겨찾기등록 성공!" : " 즐겨찾기등록 해제"}");
-                                                              },
-                                                            ),
-                                                            ElevatedButton(
-                                                              child: Text('아니요'),
-                                                              onPressed: () {
-                                                                Navigator.pop(context, "아니요");
-                                                                // 즐겨찾기 해제취소 동작 입력
-
-                                                              },
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                                  // 북마크 등록인 경우 따로 묻지 않고 그대로 진행
-                                                  }else{
-                                                    // 즐겨찾기 버튼 누르면, 즐겨찾기 DB  업뎃 ( 실제 DB에 기록하는 부분 )
-                                                    FavoriteCtr.UpdateBookmarked(
-                                                        result[index]['_id'], // ID
-                                                        FavoriteCtr.TempMainBookmarkedList[index] // 현재상태
-                                                    );
-                                                    // 즐겨찾기 임시보관리스트 업데이트 ( UI 반응형 업뎃을 위함 )
-                                                    FavoriteCtr.FrequentlyUpdateFavoriteBookmarkedList(index);
-                                                    // 즐겨찾기 등록 안내메세지 토스트(Toast)
-                                                    PopToast("${result[index]['bcode']}.${result[index]['국문']}( ${result[index]['영문']}) : ${result[index]['cnum']}장 ${result[index]['vnum']}절${FavoriteCtr.TempMainBookmarkedList[index] == 1? " 즐겨찾기등록 성공!" : " 즐겨찾기등록 해제"}");
-                                                  }
-                                                }
-                                            ),
-                                          ],
-                                        ),
-                                        // 성경구절 뿌리기
-                                        WordBreakText("${result[index][FavoriteCtr.FavoriteBibleName]}", style: TextStyle(fontSize: BibleCtr.Textsize, height:BibleCtr.Textheight, color: Colors.white)),
-                                      ],
-                                    ),
+                        // 컨테이너 클릭 이벤트
+                        InkWell(
+                          splashColor: Colors.lightBlueAccent.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10),
+                          highlightColor: Colors.lightBlueAccent.withOpacity(0.1),
+                          // 해당 구절을 클릭 했을 때 이벤트 발생
+                          onTap: (){
+                            // 해당구절로 이동할지 묻는 팝업창 띄워주기
+                            IsMoveDialog(context, result, index, true);
+                          },
+                          child: Column(
+                            children: [
+                              // 날짜가 같을때는 구분선을 짧게 그어준다
+                              Divider(
+                                  color: Colors.white,
+                                  thickness:GetForwardDate(index)==GetDate(index)? 0.5 : 1.0 ,
+                                  indent: GetForwardDate(index)==GetDate(index)? 70 : 0),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  // 날짜정보 뿌리기
+                                  SizedBox(
+                                    width: 70,
+                                    child: Text(GetForwardDate(index)==GetDate(index)? "" : "${GetDate(index)}", textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: BibleCtr.Textsize, color: Colors.white)),
                                   ),
-                                )
-                              ],
-                            ),
+                                  // 즐겨찾기 버튼 + 성경구절 뿌리기
+                                  Flexible(
+                                    child: Container(
+                                      padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("${result[index]["국문"]}(${result[index]["영문"]}) ${result[index]["cnum"]}장 ${result[index]["vnum"]}절", style: TextStyle(fontSize: BibleCtr.Textsize*0.2+10,color: Colors.grey.withOpacity(1.0))),
+                                              // 즐겨찾기 버튼 추가
+                                              IconButton(
+                                                  iconSize: 25,
+                                                  padding: EdgeInsets.zero, // 아이콘 패딩 없애기
+                                                  constraints: BoxConstraints(), // 아이콘 패딩 없애기
+                                                  icon : FavoriteCtr.TempMainBookmarkedList[index] == 1? Icon(Icons.favorite) : Icon(Icons.favorite_border),
+                                                  color: FavoriteCtr.TempMainBookmarkedList[index]== 1? Colors.red : Colors.grey,
+                                                  onPressed: () async {
+                                                    // 북마크 해제인경우 안내창 띄우기
+                                                    if (FavoriteCtr.TempMainBookmarkedList[index] == 1) {
+                                                      // 안내창 띄우기
+                                                      String Alert = await showDialog(
+                                                        context: context,
+                                                        barrierDismissible: false, // user must tap button!
+                                                        builder: (BuildContext context) {
+                                                          return AlertDialog(
+                                                            title: Text('즐겨찾기를 해제하시겠습니까?'),
+                                                            content: Text("즐겨찾기 해제를 원하실경우 '예' 버튼을 눌러주세요"),
+                                                            actions: <Widget>[
+                                                              OutlinedButton(
+                                                                child: Text('예'),
+                                                                onPressed: () {
+                                                                  Navigator.pop(context, "예");
+                                                                  // 즐겨찾기 해제동작 입력
+                                                                  // 즐겨찾기 버튼 누르면, 즐겨찾기 DB  업뎃 ( 실제 DB에 기록하는 부분 )
+                                                                  FavoriteCtr.UpdateBookmarked(result[index]['_id'], FavoriteCtr.TempMainBookmarkedList[index]);
+                                                                  // 즐겨찾기 임시보관리스트 업데이트 ( UI 반응형 업뎃을 위함 )
+                                                                  FavoriteCtr.FrequentlyUpdateFavoriteBookmarkedList(index);
+                                                                  // 즐겨찾기 해제 Alert
+                                                                  showAlertDialog2(context);
+                                                                  // 즐겨찾기 등록 안내메세지 토스트(Toast)
+                                                                  PopToast("${result[index]['bcode']}.${result[index]['국문']}( ${result[index]['영문']}) : ${result[index]['cnum']}장 ${result[index]['vnum']}절${FavoriteCtr.TempMainBookmarkedList[index] == 1? " 즐겨찾기등록 성공!" : " 즐겨찾기등록 해제"}");
+                                                                },
+                                                              ),
+                                                              ElevatedButton(
+                                                                child: Text('아니요'),
+                                                                onPressed: () {
+                                                                  Navigator.pop(context, "아니요");
+                                                                  // 즐겨찾기 해제취소 동작 입력
 
-                          ],
+                                                                },
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    // 북마크 등록인 경우 따로 묻지 않고 그대로 진행
+                                                    }else{
+                                                      // 즐겨찾기 버튼 누르면, 즐겨찾기 DB  업뎃 ( 실제 DB에 기록하는 부분 )
+                                                      FavoriteCtr.UpdateBookmarked(result[index]['_id'], FavoriteCtr.TempMainBookmarkedList[index]);
+                                                      // 즐겨찾기 임시보관리스트 업데이트 ( UI 반응형 업뎃을 위함 )
+                                                      FavoriteCtr.FrequentlyUpdateFavoriteBookmarkedList(index);
+                                                      // 즐겨찾기 등록 안내메세지 토스트(Toast)
+                                                      PopToast("${result[index]['bcode']}.${result[index]['국문']}( ${result[index]['영문']}) : ${result[index]['cnum']}장 ${result[index]['vnum']}절${FavoriteCtr.TempMainBookmarkedList[index] == 1? " 즐겨찾기등록 성공!" : " 즐겨찾기등록 해제"}");
+                                                    }
+                                                  }
+                                              ),
+                                            ],
+                                          ),
+                                          // 성경구절 뿌리기
+                                          WordBreakText("${result[index][FavoriteCtr.FavoriteBibleName]}", style: TextStyle(fontSize: BibleCtr.Textsize, height:BibleCtr.Textheight, color: Colors.white)),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+
+                            ],
+                          ),
                         );
                     }
                         // 각각을 컨테이너로 묶어서 보여주기
@@ -276,3 +280,27 @@ class _FavoriteResultState extends State<FavoriteResult> {
       );
   }
 }
+
+
+
+// 즐겨찾기 헤제 완료 팝업 띄우기
+void showAlertDialog2(BuildContext context) async {
+  String result = await showDialog(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('즐겨찾기가 해제되었습니다.'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('확인'),
+            onPressed: () {
+              Navigator.pop(context, "확인");
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+

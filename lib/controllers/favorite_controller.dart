@@ -1,10 +1,13 @@
 import 'package:echo/repository/bible_repository.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'bible_controller.dart';
+
+
+// Gex컨트롤러 객체 초기화
+final BibleCtr = Get.put(BibleController());
 
 class FavoriteController extends GetxController {
-
-
   //▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼//
   //▼▼▼▼ "SharedPrefs" 정리 ▼▼▼▼//
   //▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼//
@@ -22,8 +25,8 @@ class FavoriteController extends GetxController {
     //1. 객체 불러오기
     final prefs = await SharedPreferences.getInstance();
     //2. 불러올 상태값 목록 및 데이터 업데이트
-    FavoriteBibleName     = prefs.getString('FavoriteBibleName')!;//(prefs.getString('BibleName') ?? '개역개정');
-    DropdownFilterList    = prefs.getStringList('DropdownFilterList')!;//(prefs.getString('BibleName') ?? '개역개정');
+    FavoriteBibleName     = prefs.getString('FavoriteBibleName') == null ? this.FavoriteBibleName : prefs.getString('FavoriteBibleName')!;
+    DropdownFilterList    = prefs.getStringList('DropdownFilterList') == null ? this.DropdownFilterList : prefs.getStringList('DropdownFilterList')!;
     print("불러오기 완료");
   }
 
@@ -110,6 +113,22 @@ class FavoriteController extends GetxController {
     //GetBibleSearchResult();
     update();
   }
+
+  // <함수> 자유검색 결과 클릭하면, 해당구절부터 메인에서 보여주기
+  void FreeSearchContainerClick(int index){
+    //1. 클릭 결과로부터  (BookName / Bookcode / ChapterNo / VerseNo)정보 업데이트하기
+    BibleCtr.BookName.value  = FavoriteList[index]['국문']; // 반응형이므로 value를 꼭 붙여줘야함 ㄷㄷ
+    BibleCtr.Bookcode        = FavoriteList[index]['bcode'];
+    BibleCtr.ChapterNo       = FavoriteList[index]['cnum'];
+    BibleCtr.VerseNo         = FavoriteList[index]['vnum'];
+    BibleCtr.BibleName       = FavoriteBibleName; // 성경도 동일하게 해준다.
+    //2. 결과 업데이트
+    BibleCtr.GetBibleSearchResult(); // 조건에 맞는 성경 재검색
+    //3. 메인페이지 스크롤 초기화
+    //BibleCtr.scrollController.jumpTo(0.0);
+    update();
+  }
+
 
 
 }

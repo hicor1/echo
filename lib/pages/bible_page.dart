@@ -82,7 +82,7 @@ class _BiblePageState extends State<BiblePage> {
                 icon: Icon(Icons.manage_search, color: Colors.white,size: 45,),)),
           actions: [
             Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 15, 0),
+              padding: EdgeInsets.fromLTRB(0, 0, 25, 0),
               child: IconButton(
                 onPressed: (){
                   // 글씨크기조정 팝업 띄우기
@@ -109,8 +109,8 @@ class _BiblePageState extends State<BiblePage> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.bookmark_add_rounded, color: Colors.white, size: 40,),
-                        Text(" 매일 성경", style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),)],
+                        Icon(Icons.bookmark_add_rounded, color: Colors.white, size: 35,),
+                        Text(" 매일 성경", style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),)],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,

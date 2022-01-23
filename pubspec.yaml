@@ -47,6 +47,7 @@ dependencies:
   rflutter_alert: ^2.0.4 # 팝업창
   syncfusion_flutter_sliders: ^19.4.42 # 슬라이더
   word_break_text: ^0.1.0 # 자연스러운 줄바꿈 패키지
+  getwidget: ^2.0.4 # 각종 위젯 패키지
 
 
 

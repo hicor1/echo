@@ -1,4 +1,5 @@
 import 'package:echo/components/favorite_widget.dart';
+import 'package:echo/components/general.dart';
 import 'package:echo/controllers/favorite_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,15 +39,16 @@ class _FavoritePageState extends State<FavoritePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    // 필터조건 선택
                     FavoriteDropdownFilter(),
                     SizedBox(width: 10),
+                    // 성경(Bible)선택
                     FavoriteDropdownBibles(),
                   ],
                 ),
               ),
               // 즐겨찾기 리스트 결과 가져오기
               FavoriteResult()
-
             ],
           ),
         ),

@@ -35,23 +35,24 @@ class BibleController extends GetxController {
 
     //1. 객체 불러오기
     final prefs = await SharedPreferences.getInstance();
+
     //2. 불러올 상태값 목록 및 데이터 업데이트
     // for(var element in prefs.getKeys()){
     //   DataMap[element] = prefs.get(element);
     // }
-    BibleName       = prefs.getString('BibleName')!;//(prefs.getString('BibleName') ?? '개역개정');
-    BookName.value  = prefs.getString('BookName')!;//(prefs.getString('BookName') ?? '창세기');
-    Bookcode        = prefs.getInt('Bookcode')!;//(prefs.getInt('Bookcode') ?? 1);
-    ChapterNo       = prefs.getInt('ChapterNo')!;//(prefs.getInt('ChapterNo') ?? 1);
-    VerseNo         = prefs.getInt('VerseNo')!;//(prefs.getInt('VerseNo') ?? 1);
-    id              = prefs.getInt('id')!;//(prefs.getInt('id') ?? 1);
-    Textsize        = prefs.getDouble('Textsize')!;//(prefs.getDouble('Textsize') ?? 20.0);
-    Textheight      = prefs.getDouble('Textheight')!;//(prefs.getDouble('Textheight') ?? 3.0);
-    SelectedStyle   = prefs.getString('SelectedStyle')!;
-    SelectedBibleViewNumber = prefs.getString('SelectedBibleViewNumber')!;//(prefs.getString('SelectedBibleViewNumber') ?? '1');
-
+    BibleName       = prefs.getString('BibleName') == null ? BibleName : prefs.getString('BibleName')!;
+    BookName.value  = prefs.getString('BookName') == null ? BookName.value : prefs.getString('BookName')!;
+    Bookcode        = prefs.getInt('Bookcode') == null ? Bookcode : prefs.getInt('Bookcode')!;
+    ChapterNo       = prefs.getInt('ChapterNo') == null ? ChapterNo : prefs.getInt('ChapterNo')!;
+    VerseNo         = prefs.getInt('VerseNo') == null ? VerseNo : prefs.getInt('VerseNo')!;
+    id              = prefs.getInt('id') == null ? id : prefs.getInt('id')!;
+    Textsize        = prefs.getDouble('Textsize') == null ? Textsize : prefs.getDouble('Textsize')!;
+    Textheight      = prefs.getDouble('Textheight') == null ? Textheight : prefs.getDouble('Textheight')!;
+    SelectedStyle   = prefs.getString('SelectedStyle') == null ? SelectedStyle : prefs.getString('SelectedStyle')!;
+    SelectedBibleViewNumber = prefs.getString('SelectedBibleViewNumber')  == null ? SelectedBibleViewNumber : prefs.getString('SelectedBibleViewNumber')!;
     //3. 로딩상태 업데이트
     Prefs_isLoading.value = false;
+    update(); // 상태업데이트 내용이 반영되어 로딩이 끝났음을 알려줘야함 ㄱㄱ
 
     print("불러오기 완료");
   }
@@ -289,6 +290,8 @@ class BibleController extends GetxController {
     GetBibleSearchResult(); // 조건에 맞는 성경 재검색
     //3. 메인페이지 스크롤 초기화
     scrollController.jumpTo(0.0);
+    //4. 현재 상태 저장
+    SavePrefsData(); //상태값 저장
     update();
   }
 

@@ -121,10 +121,10 @@ void openPopup(context) {
                         Container(
                           width: 400,
                           child: SfSlider(
-                            min: 15.0,
+                            min: 10.0,
                             max: 50.0,
                             interval: 10,
-                            stepSize: 5,
+                            stepSize: 2,
                             showTicks: false,
                             minorTicksPerInterval: 1,
                             showLabels: true,
@@ -170,7 +170,7 @@ void openPopup(context) {
                               min: 1.0,
                               max: 3.0,
                               interval: 1,
-                              stepSize: 0.5,
+                              stepSize: 0.2,
                               showTicks: false,
                               minorTicksPerInterval: 1,
                               showLabels: true,
@@ -247,3 +247,4 @@ void openPopup(context) {
         )
       ]).show();
 }
+

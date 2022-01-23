@@ -1,4 +1,5 @@
 import 'package:date_format/date_format.dart';
+import 'package:echo/components/commom_widget.dart';
 import 'package:echo/components/general.dart';
 import 'package:echo/controllers/bible_controller.dart';
 import 'package:echo/screens/bible_freesearch_screen.dart';
@@ -190,7 +191,7 @@ class _MainBibleSearchResultState extends State<MainBibleSearchResult> {
                           ),
                           WordBreakText("${BibleCtr.BibleSearchResult[index][BibleCtr.BibleName]}",
                             style: TextStyle(
-                                color: Colors.white,
+                                color: BibleCtr.TempMainBookmarkedList[index] == 1? Colors.lightGreen : Colors.white,
                                 fontSize: BibleCtr.Textsize,
                                 height: BibleCtr.Textheight),),
                         ],
@@ -235,11 +236,31 @@ class _MainBibleSearchResult2State extends State<MainBibleSearchResult2> {
                               fontSize: BibleCtr.Textsize*0.2+10,
                               color: Colors.grey.withOpacity(0.6),
                               height: BibleCtr.Textheight),),
-                        Container(
-                          child: Flexible(
+                        Flexible(
+                          // 텍스트박스 클릭이벤트 추가
+                          child: InkWell(
+                            // 클릭하면 즐찾추가 안내 팝업 등장 ㄱㄱ
+                            onTap: (){
+                              // 즐겨찾기 임시보관리스트 업데이트 ( UI 반응형 업뎃을 위함 )
+                              BibleCtr.FrequentlyUpdateTempMainBookmarkedList(index);
+                              // 즐겨찾기 버튼 누르면, 즐겨찾기 DB  업뎃 ( 실제 DB에 기록하는 부분 )
+                              BibleCtr.UpdateBookmarked(
+                                  BibleCtr.BibleSearchResult[index]['_id'], // ID
+                                  BibleCtr.BibleSearchResult[index]['bookmarked'] // 현재상태
+                              );
+                              // 즐겨찾기 등록 안내메세지 토스트(Toast)
+                              PopToast(
+                                  "${BibleCtr.BibleSearchResult[index]['bcode']}."
+                                      "${BibleCtr.BibleSearchResult[index]['국문']}( "
+                                      "${BibleCtr.BibleSearchResult[index]['영문']}) : "
+                                      "${BibleCtr.BibleSearchResult[index]['cnum']}장 "
+                                      "${BibleCtr.BibleSearchResult[index]['vnum']}절"
+                                      "${BibleCtr.TempMainBookmarkedList[index] == 1? " 즐겨찾기등록 성공!" : " 즐겨찾기등록 해제"}"
+                              );
+                            },
                             child: WordBreakText("${BibleCtr.BibleSearchResult[index][BibleCtr.BibleName]}",
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: BibleCtr.TempMainBookmarkedList[index] == 1? Colors.lightGreen : Colors.white,
                                   fontSize: BibleCtr.Textsize,
                                   height: BibleCtr.Textheight),),
                           ),
@@ -351,94 +372,88 @@ class _FreeSearchResultState extends State<FreeSearchResult> {
         child: Scrollbar(
           child: ListView.builder(
             itemCount: BibleCtr.FressSearchList.length,
-            itemBuilder: (context, index) =>
-            // 각각의 컨테이너를 눌렀을때 이벤트 부여
-            InkWell(
-              splashColor: Colors.lightBlueAccent,
-              borderRadius: BorderRadius.circular(50),
-              highlightColor: Colors.lightBlueAccent.withOpacity(0.4),
-              // 컨테이너를 클릭 했을 때,
-              onTap: () {
-                // 토스트메세지 띄우기
-                PopToast(
-                  "${BibleCtr.FressSearchList[index]['bcode']}."
-                  "${BibleCtr.FressSearchList[index]['국문']}( "
-                  "${BibleCtr.FressSearchList[index]['영문']}) : "
-                  "${BibleCtr.FressSearchList[index]['cnum']}장 "
-                  "${BibleCtr.FressSearchList[index]['vnum']}절"
-                  "로 이동합니다."
-                );
-                // 선택 구절을 메인에서 보여주기 위해 데이터 업데이트
-                BibleCtr.FreeSearchContainerClick(index);
-                // 이전페이지로 돌아가기
-                Get.back();
-              },
-              child: Container(
-                padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    width: 2.5,
-                    color: Colors.grey.withOpacity(0.7),
+            itemBuilder: (context, index) {
+              // 변수 정의
+              var result = BibleCtr.FressSearchList;
+
+              // 아래부터 진짜 위젯 뿌리기
+              return InkWell(
+                splashColor: Colors.lightBlueAccent.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(10),
+                highlightColor: Colors.lightBlueAccent.withOpacity(0.1),
+                // 컨테이너를 클릭 했을 때,
+                onTap: () {
+                  //문의창 띄우기 ( 진짜 해당구절로 이동하는게 맞는지 문의 )
+                  IsMoveDialog(context, result, index, false);
+                },
+                child: Container(
+                  padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                  margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      width: 2.5,
+                      color: Colors.grey.withOpacity(0.7),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("${result[index]['bcode']}."
+                              "${result[index]['국문']}( "
+                              "${result[index]['영문']}) : "
+                              "${result[index]['cnum']}장 "
+                              "${result[index]['vnum']}절",
+                            style: TextStyle(color: Colors.grey, fontSize: 18),),
+                          // 즐겨찾기 버튼 위젯
+                          IconButton(
+                              iconSize: 25,
+                              padding: EdgeInsets.zero, // 아이콘 패딩 없애기
+                              constraints: BoxConstraints(), // 아이콘 패딩 없애기
+                              icon : BibleCtr.TempBookmarkedList[index] == 1? Icon(Icons.favorite) : Icon(Icons.favorite_border),
+                              color: BibleCtr.TempBookmarkedList[index]== 1? Colors.red : Colors.grey,
+                              onPressed: (){
+                                // 즐겨찾기 임시보관리스트 업데이트 ( UI 반응형 업뎃을 위함 )
+                                BibleCtr.FrequentlyUpdateTempBookmarkedList(index);
+                                // 즐겨찾기 버튼 누르면, 즐겨찾기 DB  업뎃 ( 실제 DB에 기록하는 부분 )
+                                BibleCtr.UpdateBookmarked(
+                                    BibleCtr.FressSearchList[index]['_id'], // ID
+                                    BibleCtr.FressSearchList[index]['bookmarked'] // 현재상태
+                                );
+                                // 즐겨찾기 등록 안내메세지 토스트(Toast)
+                                PopToast(
+                                    "${BibleCtr.FressSearchList[index]['bcode']}."
+                                        "${BibleCtr.FressSearchList[index]['국문']}( "
+                                        "${BibleCtr.FressSearchList[index]['영문']}) : "
+                                        "${BibleCtr.FressSearchList[index]['cnum']}장 "
+                                        "${BibleCtr.FressSearchList[index]['vnum']}절"
+                                        "${BibleCtr.TempBookmarkedList[index] == 1? " 즐겨찾기등록 성공!" : " 즐겨찾기등록 해제"}"
+                                );
+                              }
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      SubstringHighlight(
+                        text : BibleCtr.FressSearchList[index][BibleCtr.SelectedDropdownValue],
+                        term: this.widget.textcontroller.text,
+                        textStyle: TextStyle(color:Colors.white, fontSize: 23),
+                        textStyleHighlight: TextStyle(              // highlight style
+                          color: Colors.lightBlueAccent,
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("${BibleCtr.FressSearchList[index]['bcode']}."
-                            "${BibleCtr.FressSearchList[index]['국문']}( "
-                            "${BibleCtr.FressSearchList[index]['영문']}) : "
-                            "${BibleCtr.FressSearchList[index]['cnum']}장 "
-                            "${BibleCtr.FressSearchList[index]['vnum']}절",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),),
-                        // 즐겨찾기 버튼 위젯
-                        IconButton(
-                            iconSize: 25,
-                            padding: EdgeInsets.zero, // 아이콘 패딩 없애기
-                            constraints: BoxConstraints(), // 아이콘 패딩 없애기
-                            icon : BibleCtr.TempBookmarkedList[index] == 1? Icon(Icons.favorite) : Icon(Icons.favorite_border),
-                            color: BibleCtr.TempBookmarkedList[index]== 1? Colors.red : Colors.grey,
-                            onPressed: (){
-                              // 즐겨찾기 임시보관리스트 업데이트 ( UI 반응형 업뎃을 위함 )
-                              BibleCtr.FrequentlyUpdateTempBookmarkedList(index);
-                              // 즐겨찾기 버튼 누르면, 즐겨찾기 DB  업뎃 ( 실제 DB에 기록하는 부분 )
-                              BibleCtr.UpdateBookmarked(
-                                  BibleCtr.FressSearchList[index]['_id'], // ID
-                                  BibleCtr.FressSearchList[index]['bookmarked'] // 현재상태
-                              );
-                              // 즐겨찾기 등록 안내메세지 토스트(Toast)
-                              PopToast(
-                                  "${BibleCtr.FressSearchList[index]['bcode']}."
-                                      "${BibleCtr.FressSearchList[index]['국문']}( "
-                                      "${BibleCtr.FressSearchList[index]['영문']}) : "
-                                      "${BibleCtr.FressSearchList[index]['cnum']}장 "
-                                      "${BibleCtr.FressSearchList[index]['vnum']}절"
-                                      "${BibleCtr.TempBookmarkedList[index] == 1? " 즐겨찾기등록 성공!" : " 즐겨찾기등록 해제"}"
-                              );
-                            }
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 5),
-                    SubstringHighlight(
-                      text : BibleCtr.FressSearchList[index][BibleCtr.SelectedDropdownValue],
-                      term: this.widget.textcontroller.text,
-                      textStyle: TextStyle(color:Colors.white, fontSize: 23),
-                      textStyleHighlight: TextStyle(              // highlight style
-                        color: Colors.lightBlueAccent,
-                        decoration: TextDecoration.none,
-                        fontWeight: FontWeight.w400,
-                      ),
+              );
+            }
+            // 각각의 컨테이너를 눌렀을때 이벤트 부여
 
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ),
         ),
       ),
@@ -573,7 +588,7 @@ class _FloatingButtonState extends State<FloatingButton> {
           bottom: 0.0,
           child: Container(
             width: 130,
-            height: 70,
+            height: 55,
             child: FloatingActionButton(
               backgroundColor: Colors.transparent,
               splashColor: Colors.white.withOpacity(0.25),
@@ -588,7 +603,7 @@ class _FloatingButtonState extends State<FloatingButton> {
                   PopToast("처음페이지 입니다.");
                 }
               },
-              child: Icon(Icons.keyboard_arrow_left, size: 70, color: Colors.white.withOpacity(0.5),),
+              child: Icon(Icons.keyboard_arrow_left, size: 55, color: Colors.white.withOpacity(0.5),),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(70),
                 side: BorderSide(color: Colors.grey.withOpacity(0.3), width: 3)
@@ -601,7 +616,7 @@ class _FloatingButtonState extends State<FloatingButton> {
           bottom: 0.0,
           child: Container(
             width: 130,
-            height: 70,
+            height: 55,
             child: FloatingActionButton(
               backgroundColor: Colors.transparent,
               splashColor: Colors.white.withOpacity(0.25),
@@ -615,7 +630,7 @@ class _FloatingButtonState extends State<FloatingButton> {
                   PopToast("마지막페이지 입니다.");
                 }
               },
-              child: Icon(Icons.keyboard_arrow_right, size: 70, color: Colors.white.withOpacity(0.5),),
+              child: Icon(Icons.keyboard_arrow_right, size: 55, color: Colors.white.withOpacity(0.5),),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(70),
                 side: BorderSide(color: Colors.grey.withOpacity(0.3), width: 3)
